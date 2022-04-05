@@ -4,17 +4,17 @@ test('parsing', () => {
     // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
     let inputArticle = functions.parseInputToJson("CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];");
     let jsonArticle = {
-        codeArticle: "testCodeArticle",
-        codeCategory: "testCodeCategory",
-        codeOperation: "testCodeOperation",
+        codeArticle: "888",
+        codeCategory: "CODECATEGORY",
+        codeOperation: "ASSEMBLAGE",
         articles: [
             {
-                codeArticle: "testCodeArticle1",
-                quantite: 10
+                codeArticle: "PIED",
+                quantite: 4
             },
             {
-                codeArticle: "testCodeArticle2",
-                quantite: 12
+                codeArticle: "BOIS",
+                quantite: 1
             }
         ]
     };
