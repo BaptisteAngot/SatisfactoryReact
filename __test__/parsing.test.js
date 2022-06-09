@@ -2,11 +2,11 @@ const functions = require('../src/utils/parsing.js')
 
 describe('ParseStringToJson',() => {
     test('parsing', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
-        let inputArticle = functions.parseStringToJson("CODECATEGORY:888 =(ASSEMBLAGE)[PIED*4]+[BOIS*1];");
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+        let inputArticle = functions.parseStringToJson("codeCategorie:888 =(ASSEMBLAGE)[PIED*4]+[BOIS*1];");
         let jsonArticle = {
             codeArticle: "888",
-            codeCategory: "CODECATEGORY",
+            codeCategorie: "codeCategorie",
             codeOperation: "ASSEMBLAGE",
             articles: [
                 {
@@ -20,7 +20,7 @@ describe('ParseStringToJson',() => {
             ]
         };
         expect(inputArticle.codeArticle).toBe(jsonArticle.codeArticle);
-        expect(inputArticle.codeCategory).toBe(jsonArticle.codeCategory);
+        expect(inputArticle.codeCategorie).toBe(jsonArticle.codeCategorie);
         expect(inputArticle.codeOperation).toBe(jsonArticle.codeOperation);
         expect(inputArticle.articles[0].codeArticle).toBe(jsonArticle.articles[0].codeArticle);
         expect(inputArticle.articles[0].quantite).toBe(jsonArticle.articles[0].quantite);
@@ -29,33 +29,33 @@ describe('ParseStringToJson',() => {
     });
 
     test('2 elements par recette', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
-        let inputArticle1 = functions.parseStringToJson("CODECATEGORY:888 =(ASSEMBLAGE)[PIED*4]+[BOIS*1]+[BOIS*1];");
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+        let inputArticle1 = functions.parseStringToJson("codeCategorie:888 =(ASSEMBLAGE)[PIED*4]+[BOIS*1]+[BOIS*1];");
         expect(inputArticle1).toBe("pas plus de 2 elements par recette");
     });
 
     test('erreur de syntax: (CodeOpération)', () => {
-        let inputArticle2 = functions.parseStringToJson("CODECATEGORY:888 =(ASSEMBLAGE[PIED*4][BOIS*1];");
+        let inputArticle2 = functions.parseStringToJson("codeCategorie:888 =(ASSEMBLAGE[PIED*4][BOIS*1];");
         expect(inputArticle2).toBe("erreur de syntax: (CodeOpération)");
     });
 
     test('erreur de syntax: [codeActicle*qty]', () => {
-        let inputArticle3 = functions.parseStringToJson("CODECATEGORY:888=(ASSEMBLAGE)PIED*4BOIS*1;");
+        let inputArticle3 = functions.parseStringToJson("codeCategorie:888=(ASSEMBLAGE)PIED*4BOIS*1;");
         expect(inputArticle3).toBe("erreur de syntax: [codeActicle*qty]");
     });
 
     test('(empty) erreur de syntax: [codeActicle*qty]', () => {
-        let inputArticle3 = functions.parseStringToJson("CODECATEGORY:888 =(ASSEMBLAGE)");
+        let inputArticle3 = functions.parseStringToJson("codeCategorie:888 =(ASSEMBLAGE)");
         expect(inputArticle3).toBe("erreur de syntax: [codeActicle*qty]");
     });
 
-    test('erreur de syntax: CODECATEGORY:CODEARTICLE', () => {
-        let inputArticle3 = functions.parseStringToJson("CODECATEGORY888 =(ASSEMBLAGE[PIED*4][BOIS*1];");
-        expect(inputArticle3).toBe("erreur de syntax: CODECATEGORY:CODEARTICLE");
+    test('erreur de syntax: codeCategorie:CODEARTICLE', () => {
+        let inputArticle3 = functions.parseStringToJson("codeCategorie888 =(ASSEMBLAGE[PIED*4][BOIS*1];");
+        expect(inputArticle3).toBe("erreur de syntax: CODECATEGORIE:CODEARTICLE");
     });
 
     test('erreur de syntax: \'=\'', () => {
-        let inputArticle3 = functions.parseStringToJson("CODECATEGORY:888 (ASSEMBLAGE[PIED*4][BOIS*1];");
+        let inputArticle3 = functions.parseStringToJson("codeCategorie:888 (ASSEMBLAGE[PIED*4][BOIS*1];");
         expect(inputArticle3).toBe("erreur de syntax: '='");
     });
 })
@@ -64,7 +64,7 @@ describe('ParseStringToJson',() => {
 /*
 * {
             codeArticle: "888",
-            codeCategory: "CODECATEGORY",
+            codeCategorie: "codeCategorie",
             codeOperation: "ASSEMBLAGE",
             articles: [
                 {
@@ -79,10 +79,10 @@ describe('ParseStringToJson',() => {
         }*/
 describe('ParseJsonToString',() => {
     test('parsing', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
         let inputArticle = functions.parseJsonToString({
             codeArticle: "888",
-            codeCategory: "CODECATEGORY",
+            codeCategorie: "codeCategorie",
             codeOperation: "ASSEMBLAGE",
             articles: [
                 {
@@ -95,13 +95,13 @@ describe('ParseJsonToString',() => {
                 }
             ]
         });
-        let jsonArticle = "CODECATEGORY:888=(ASSEMBLAGE)[PIED*4][BOIS*1];";
+        let jsonArticle = "codeCategorie:888=(ASSEMBLAGE)[PIED*4][BOIS*1];";
         expect(inputArticle).toBe(jsonArticle);
     });
     test('attribut : codeArticle, introuvable', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
         let inputArticle = functions.parseJsonToString({
-            codeCategory: "CODECATEGORY",
+            codeCategorie: "codeCategorie",
             codeOperation: "ASSEMBLAGE",
             articles: [
                 {
@@ -116,8 +116,8 @@ describe('ParseJsonToString',() => {
         });
         expect(inputArticle).toBe("attribut : codeArticle, introuvable");
     });
-    test('attribut : codeCategory, introuvable', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+    test('attribut : codeCategorie, introuvable', () => {
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
         let inputArticle = functions.parseJsonToString({
             codeArticle: "888",
             codeOperation: "ASSEMBLAGE",
@@ -132,13 +132,13 @@ describe('ParseJsonToString',() => {
                 }
             ]
         });
-        expect(inputArticle).toBe("attribut : codeCategory, introuvable");
+        expect(inputArticle).toBe("attribut : codeCategorie, introuvable");
     });
     test('attribut : codeOperation, introuvable', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
         let inputArticle = functions.parseJsonToString({
             codeArticle: "888",
-            codeCategory: "CODECATEGORY",
+            codeCategorie: "codeCategorie",
             articles: [
                 {
                     codeArticle: "PIED",
@@ -153,10 +153,10 @@ describe('ParseJsonToString',() => {
         expect(inputArticle).toBe("attribut : codeOperation, introuvable");
     });
     test('plus de 2 elements', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
         let inputArticle = functions.parseJsonToString({
             codeArticle: "888",
-            codeCategory: "CODECATEGORY",
+            codeCategorie: "codeCategorie",
             codeOperation: "ASSEMBLAGE",
             articles: [
                 {
@@ -176,10 +176,10 @@ describe('ParseJsonToString',() => {
         expect(inputArticle).toBe("plus de 2 elements");
     });
     test('attribut : articles, introuvable', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
         let inputArticle = functions.parseJsonToString({
             codeArticle: "888",
-            codeCategory: "CODECATEGORY",
+            codeCategorie: "codeCategorie",
             codeOperation: "ASSEMBLAGE",
             artic: [
                 {
@@ -195,10 +195,10 @@ describe('ParseJsonToString',() => {
         expect(inputArticle).toBe("attribut : articles, introuvable");
     });
     test('les attributs dans la list d\'articles incorrect ( ex: articles:[{codeArticle:\"codeArticle\",quantite:10}] )', () => {
-        // CODECATEGORY:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
+        // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
         let inputArticle = functions.parseJsonToString({
             codeArticle: "888",
-            codeCategory: "CODECATEGORY",
+            codeCategorie: "codeCategorie",
             codeOperation: "ASSEMBLAGE",
             articles: [
                 {

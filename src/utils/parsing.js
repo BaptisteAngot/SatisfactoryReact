@@ -10,7 +10,7 @@ const functions = {
         }
         let metadata = splitEqual[0].split(":");
         if(metadata.length !== 2) {
-            return "erreur de syntax: CODECATEGORY:CODEARTICLE";
+            return "erreur de syntax: CODECATEGORIE:CODEARTICLE";
         }
         let recette = splitEqual[1];
         let op = recette.match(regExpForOp)
@@ -37,19 +37,19 @@ const functions = {
         }
         return {
             codeArticle: metadata[1],
-            codeCategory: metadata[0],
+            codeCategorie: metadata[0],
             codeOperation: op[1],
             articles: articlesQt
         };
     },
     parseJsonToString: (json) => {
         if (!json.codeArticle){ return "attribut : codeArticle, introuvable"; }
-        if (!json.codeCategory){ return "attribut : codeCategory, introuvable"; }
+        if (!json.codeCategorie){ return "attribut : codeCategorie, introuvable"; }
         if (!json.codeOperation){ return "attribut : codeOperation, introuvable"; }
         if (!json.articles){ return "attribut : articles, introuvable"; }
         if(json.articles.length > 2){ return "plus de 2 elements"; }
         // CODECATEGORY:888
-        let metaData = json.codeCategory + ":" + json.codeArticle;
+        let metaData = json.codeCategorie + ":" + json.codeArticle;
         //(ASSEMBLAGE)
         let op = "("+json.codeOperation+")";
         //[PIED*4]+[BOIS*1]
