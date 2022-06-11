@@ -19,44 +19,44 @@ describe('ParseStringToJson',() => {
                 }
             ]
         };
-        expect(inputArticle.codeArticle).toBe(jsonArticle.codeArticle);
-        expect(inputArticle.codeCategorie).toBe(jsonArticle.codeCategorie);
-        expect(inputArticle.codeOperation).toBe(jsonArticle.codeOperation);
-        expect(inputArticle.articles[0].codeArticle).toBe(jsonArticle.articles[0].codeArticle);
-        expect(inputArticle.articles[0].quantite).toBe(jsonArticle.articles[0].quantite);
-        expect(inputArticle.articles[1].codeArticle).toBe(jsonArticle.articles[1].codeArticle);
-        expect(inputArticle.articles[1].quantite).toBe(jsonArticle.articles[1].quantite);
+        expect(inputArticle.data.codeArticle).toBe(jsonArticle.codeArticle);
+        expect(inputArticle.data.codeCategorie).toBe(jsonArticle.codeCategorie);
+        expect(inputArticle.data.codeOperation).toBe(jsonArticle.codeOperation);
+        expect(inputArticle.data.articles[0].codeArticle).toBe(jsonArticle.articles[0].codeArticle);
+        expect(inputArticle.data.articles[0].quantite).toBe(jsonArticle.articles[0].quantite);
+        expect(inputArticle.data.articles[1].codeArticle).toBe(jsonArticle.articles[1].codeArticle);
+        expect(inputArticle.data.articles[1].quantite).toBe(jsonArticle.articles[1].quantite);
     });
 
     test('2 elements par recette', () => {
         // codeCategorie:888:TABLE =(ASSEMBLAGE)[PIED*4]+[BOIS*1];
         let inputArticle1 = functions.parseStringToJson("codeCategorie:888 =(ASSEMBLAGE)[PIED*4]+[BOIS*1]+[BOIS*1];");
-        expect(inputArticle1).toBe("pas plus de 2 elements par recette");
+        expect(inputArticle1.error).toBe("pas plus de 2 elements par recette");
     });
 
     test('erreur de syntax: (CodeOpération)', () => {
         let inputArticle2 = functions.parseStringToJson("codeCategorie:888 =(ASSEMBLAGE[PIED*4][BOIS*1];");
-        expect(inputArticle2).toBe("erreur de syntax: (CodeOpération)");
+        expect(inputArticle2.error).toBe("erreur de syntax: (CodeOpération)");
     });
 
     test('erreur de syntax: [codeActicle*qty]', () => {
         let inputArticle3 = functions.parseStringToJson("codeCategorie:888=(ASSEMBLAGE)PIED*4BOIS*1;");
-        expect(inputArticle3).toBe("erreur de syntax: [codeActicle*qty]");
+        expect(inputArticle3.error).toBe("erreur de syntax: [codeActicle*qty]");
     });
 
     test('(empty) erreur de syntax: [codeActicle*qty]', () => {
         let inputArticle3 = functions.parseStringToJson("codeCategorie:888 =(ASSEMBLAGE)");
-        expect(inputArticle3).toBe("erreur de syntax: [codeActicle*qty]");
+        expect(inputArticle3.error).toBe("erreur de syntax: [codeActicle*qty]");
     });
 
     test('erreur de syntax: codeCategorie:CODEARTICLE', () => {
         let inputArticle3 = functions.parseStringToJson("codeCategorie888 =(ASSEMBLAGE[PIED*4][BOIS*1];");
-        expect(inputArticle3).toBe("erreur de syntax: CODECATEGORIE:CODEARTICLE");
+        expect(inputArticle3.error).toBe("erreur de syntax: CODECATEGORIE:CODEARTICLE");
     });
 
     test('erreur de syntax: \'=\'', () => {
         let inputArticle3 = functions.parseStringToJson("codeCategorie:888 (ASSEMBLAGE[PIED*4][BOIS*1];");
-        expect(inputArticle3).toBe("erreur de syntax: '='");
+        expect(inputArticle3.error).toBe("erreur de syntax: '='");
     });
 })
 

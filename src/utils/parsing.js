@@ -6,16 +6,16 @@ const functions = {
         const regExpForArt = /\[(.*?)\]/g;
         let splitEqual = input.split("=");
         if(splitEqual.length !== 2) {
-            return "erreur de syntax: '='";
+            return {error:"erreur de syntax: '='"};
         }
         let metadata = splitEqual[0].split(":");
         if(metadata.length !== 2) {
-            return "erreur de syntax: CODECATEGORIE:CODEARTICLE";
+            return {error:"erreur de syntax: CODECATEGORIE:CODEARTICLE"};
         }
         let recette = splitEqual[1];
         let op = recette.match(regExpForOp)
         if(!op) {
-            return "erreur de syntax: (CodeOpération)"
+            return {error: "erreur de syntax: (CodeOpération)"};
         }
         let listeMatch = recette.match(regExpForArt);
         let articlesQt = []
@@ -30,16 +30,18 @@ const functions = {
                 })
             });
         }catch (e){
-            return "erreur de syntax: [codeActicle*qty]";
+            return {error: "erreur de syntax: [codeActicle*qty]"};
         }
         if(listeMatch.length > 2) {
-            return "pas plus de 2 elements par recette";
+            return {error: "pas plus de 2 elements par recette"};
         }
         return {
-            codeArticle: metadata[1],
-            codeCategorie: metadata[0],
-            codeOperation: op[1],
-            articles: articlesQt
+            data: {
+                codeArticle: metadata[1],
+                codeCategorie: metadata[0],
+                codeOperation: op[1],
+                articles: articlesQt
+            }
         };
     },
     parseJsonToString: (json) => {
