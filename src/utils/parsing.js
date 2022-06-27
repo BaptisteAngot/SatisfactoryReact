@@ -9,12 +9,15 @@ const functions = {
             return {error:"erreur de syntax: '='"};
         }
         let metadata = splitEqual[0].split(":");
-        if(metadata.length !== 2) {
+        if(metadata[0] === "" || metadata[1] === "") {
             return {error:"erreur de syntax: CODECATEGORIE:CODEARTICLE"};
+        }
+        if (metadata[1].length !== 10) {
+            return {error:"Code article doit contenir 10 caractères"};
         }
         let recette = splitEqual[1];
         let op = recette.match(regExpForOp)
-        if(!op) {
+        if(!op || op[1] === "") {
             return {error: "erreur de syntax: (CodeOpération)"};
         }
         let listeMatch = recette.match(regExpForArt);

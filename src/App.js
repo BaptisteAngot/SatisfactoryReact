@@ -15,6 +15,7 @@ function App() {
 
   const [category,setCategory] = useState({});
   const [article,setArticle] = useState([]);
+  const [refreshArticle,setRefreshArticle] = useState(true);
   const [operation,setOperation] = useState({});
 
   const [result,setResult] = useState({error : "Empty"});
@@ -23,19 +24,25 @@ function App() {
       let newArticle = article;
       newArticle[index] = item;
       setArticle(newArticle);
+      setRefreshArticle(!refreshArticle);
   }
 
   const createTempArticle = () => {
-      setCodeRes(codeRes+code);
-      setListArticleCreated(listArticleCreated.concat({
-          libelle: `your article`,
-          code: result.data.codeArticle,
-          id_categorie: result.data.codeCategorie,
-      }));
-      setResult({error : "Empty"});
-      setOperation({});
-      setCategory({});
-      setArticle([]);
+      if (result.error){
+          alert(result.error);
+      }else{
+          setCodeRes(codeRes+code);
+          setListArticleCreated(listArticleCreated.concat({
+              libelle: `your article`,
+              code: result.data.codeArticle,
+              id_categorie: result.data.codeCategorie,
+          }));
+          setResult({error : "Empty"});
+          setOperation({});
+          setCodeNewArticle("");
+          setCategory({});
+          setArticle([]);
+      }
   }
 
   useEffect(() => {
@@ -58,7 +65,7 @@ function App() {
       let res = codeCategory+":"+codeNewArticle+"="+"("+codeOperation+")"+codeArticle+";";
       setCode(res);
       setResult(functions.parseStringToJson(res));
-  }, [codeNewArticle, category, article, operation]);
+  }, [codeNewArticle, category, article, operation, refreshArticle]);
 
   return (
       <div style={styles.body}>
@@ -75,6 +82,24 @@ function App() {
                     setCode(event.target.value);
                 }}/>
             </div>
+            {!result.error ? (
+                <div >
+                    <p>codeArticle : {result.data.codeArticle}</p>
+                    <p>codeCategory : {result.data.codeCategorie}</p>
+                    <p>codeOperation : {result.data.codeOperation}</p>
+                    <p>Articles : </p>
+                    {
+                        result.data.articles.map((item) => {
+                            return<div>
+                                <p>codeArticle : {item.codeArticle}</p>
+                                <p>quantite : {item.quantite}</p>
+                            </div>
+                        })
+                    }
+                </div>
+            ):(
+                <p>{result.error}</p>
+            )}
             <div style={{
                 display: "flex",
                 flexDirection: "row",
@@ -94,7 +119,6 @@ function App() {
                 </div>
                 <input value={"Add"}
                        className={"btn"}
-
                        style={{
                            ...styleGlobal.button,
                            marginRight:"10%",
@@ -103,7 +127,6 @@ function App() {
                            backgroundColor:"#00bcd4",
                         }}
                        type={"submit"}
-                       disabled={result.error}
                        onClick={() => {
                            createTempArticle();
                            /*createArticle(result).then(r => console(r));*/
@@ -144,24 +167,6 @@ function App() {
                        setCode("");
                        createArticle(res).then(() =>  alert("Envoyé")).catch(r => alert(`Error : ${r}`));
                    }}/>
-            {!result.error ? (
-                <div >
-                    <p>codeArticle : {result.data.codeArticle}</p>
-                    <p>codeCategory : {result.data.codeCategorie}</p>
-                    <p>codeOperation : {result.data.codeOperation}</p>
-                    <p>Articles : </p>
-                    {
-                      result.data.articles.map((item) => {
-                        return<div>
-                          <p>codeArticle : {item.codeArticle}</p>
-                          <p>quantite : {item.quantite}</p>
-                        </div>
-                      })
-                    }
-                </div>
-            ):(
-                <p>{result.error}</p>
-            )}
         </div>
       </div>
   );
