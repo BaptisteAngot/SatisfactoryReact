@@ -27,7 +27,7 @@ const SearchCategories = ({addCategory}) => {
                     categoriesFiltered.length > 0 ?
                         categoriesFiltered.map((category, index) => {
                             if (index === 5) {
-                                return <div style={{...styleGlobal.label, alignSelf:"center"}}>...</div>
+                                return <div key={index} style={{...styleGlobal.label, alignSelf:"center"}}>...</div>
                             }else if (index > 5){
                                 return null;
                             }

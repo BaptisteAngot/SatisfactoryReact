@@ -30,9 +30,6 @@ export const styleGlobal = {
     borderRadius:"10px",
     border: "2px solid black",
     height: 30,
-    ":hover": {
-      background: "rgb(106,170,215)"
-    },
     margin: "10px 0",
     padding: "0 10px",
     color: "#fff",

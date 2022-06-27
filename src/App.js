@@ -9,7 +9,9 @@ const functions = require('./utils/parsing.js')
 
 function App() {
   const [code,setCode] = useState("");
+  const [codeRes,setCodeRes] = useState("");
   const [codeNewArticle,setCodeNewArticle] = useState("");
+  const [listArticleCreated,setListArticleCreated] = useState([]);
 
   const [category,setCategory] = useState({});
   const [article,setArticle] = useState([]);
@@ -21,6 +23,19 @@ function App() {
       let newArticle = article;
       newArticle[index] = item;
       setArticle(newArticle);
+  }
+
+  const createTempArticle = () => {
+      setCodeRes(codeRes+code);
+      setListArticleCreated(listArticleCreated.concat({
+          libelle: `your article`,
+          code: result.data.codeArticle,
+          id_categorie: result.data.codeCategorie,
+      }));
+      setResult({error : "Empty"});
+      setOperation({});
+      setCategory({});
+      setArticle([]);
   }
 
   useEffect(() => {
@@ -43,7 +58,7 @@ function App() {
       let res = codeCategory+":"+codeNewArticle+"="+"("+codeOperation+")"+codeArticle+";";
       setCode(res);
       setResult(functions.parseStringToJson(res));
-  }, [codeNewArticle,category,article,operation]);
+  }, [codeNewArticle, category, article, operation]);
 
   return (
       <div style={styles.body}>
@@ -79,21 +94,50 @@ function App() {
                 </div>
                 <input value={"Add"}
                        className={"btn"}
-                       style={{...styleGlobal.button, marginRight:"10%", width:"100px", height:"50px", backgroundColor:"#00bcd4"}}
+
+                       style={{
+                           ...styleGlobal.button,
+                           marginRight:"10%",
+                           width:"100px",
+                           height:"50px",
+                           backgroundColor:"#00bcd4",
+                        }}
                        type={"submit"}
+                       disabled={result.error}
                        onClick={() => {
-                           setResult(functions.parseStringToJson(code));
-                           createArticle(result).then(r => console(r));
+                           createTempArticle();
+                           /*createArticle(result).then(r => console(r));*/
                        }}/>
             </div>
 
             <div style={styles.searchContainer}>
                 <SearchOperations addOperation={setOperation}/>
                 <SearchCategories addCategory={setCategory}/>
-                <SearchArticles addArticles={addArticle} indexArticle={0}/>
-                <SearchArticles addArticles={addArticle} indexArticle={1}/>
+                <SearchArticles addArticles={addArticle} listArticlesCreate={listArticleCreated} indexArticle={0}/>
+                <SearchArticles addArticles={addArticle} listArticlesCreate={listArticleCreated} indexArticle={1}/>
             </div>
-
+            <p>
+                {codeRes}
+            </p>
+            <input value={"Push"}
+                   className={"btn"}
+                   style={{
+                       ...styleGlobal.button,
+                       marginRight:"10%",
+                       width:"100px",
+                       height:"50px",
+                       backgroundColor:"#00bcd4",
+                   }}
+                   type={"submit"}
+                   onClick={() => {
+                       let res = [];
+                       let array = codeRes.split(";");
+                       array.pop();
+                       array.forEach((item) => {
+                           res.push(functions.parseStringToJson(item).data);
+                       });
+                       createArticle(res).then(r => console(r));
+                   }}/>
             {!result.error ? (
                 <div >
                     <p>codeArticle : {result.data.codeArticle}</p>
