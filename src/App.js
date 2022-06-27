@@ -136,7 +136,13 @@ function App() {
                        array.forEach((item) => {
                            res.push(functions.parseStringToJson(item).data);
                        });
-                       createArticle(res).then(r => console(r));
+                       setCodeRes("");
+                       setResult({error : "Empty"});
+                       setOperation({});
+                       setCategory({});
+                       setArticle([]);
+                       setCode("");
+                       createArticle(res).then(() =>  alert("Envoyé")).catch(r => alert(`Error : ${r}`));
                    }}/>
             {!result.error ? (
                 <div >

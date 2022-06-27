@@ -12,8 +12,6 @@ const SearchArticles = ({addArticles, listArticlesCreate, indexArticle}) => {
     useEffect(() => {
         getArticles().then(res => {
             setArticlesFiltered(functions.filter("",res.data));
-            console.log(res.data);
-            console.log(listArticlesCreate);
             setArticles([...res.data, ...listArticlesCreate, ...articles]);
         });
     },[]);
